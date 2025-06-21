@@ -9,6 +9,7 @@ import { NewAppScreen } from '@react-native/new-app-screen';
 import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
 import Sheet from './src/components/Sheet';
 import AnoSheet from './src/components/AnoSheet';
+import Root from './src/components/Root';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -16,7 +17,7 @@ function App() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <Sheet/>
+      <Root/>
     </View>
   );
 }

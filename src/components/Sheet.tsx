@@ -18,7 +18,21 @@ import Animated, {
   withDelay,
   runOnJS,
 } from 'react-native-reanimated';
-const Sheet = () => {
+
+interface ModalProps {
+  onClose?: () => void;
+  backgroundColor?: string;
+  visible?: boolean;
+  children?: React.ReactNode;
+  style?: object;
+}
+
+const Sheet: React.FC<ModalProps> = ({
+  onClose,
+  backgroundColor,
+  visible,
+  children,
+}) => {
   const sv = useSharedValue(1000);
   const [modalShow, setModalShow] = useState(false);
   const [showModalContent, setShowModalContent] = useState(false);
@@ -37,7 +51,7 @@ const Sheet = () => {
   }));
 
   useEffect(() => {
-    if (modalShow) {
+    if (visible) {
       setShowModalContent(true);
       sv.value = withDelay(
         300,
@@ -54,35 +68,38 @@ const Sheet = () => {
       //   }
       // });
     }
-  }, [modalShow]);
+  }, [visible]);
   return (
     <>
       <Modal
-        visible={modalShow}
+        visible={visible}
         animationType="none"
         transparent
         statusBarTranslucent
-        onRequestClose={() => setModalShow(false)}
+        onRequestClose={onClose}
       >
-        <TouchableOpacity
-          activeOpacity={1}
-          onPress={() => setModalShow(false)}
+        <View
           style={[
             StyleSheet.absoluteFillObject,
-            {
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-              backgroundColor: 'rgba(0,0,0,0.6)',
-              zIndex: 1000,
-            },
+            { justifyContent: 'flex-end', alignItems: 'center' },
           ]}
         >
+          {/* Overlay: closes modal on press */}
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={onClose}
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              backgroundColor: 'rgba(0,0,0,0.6)',
+            }}
+          />
+          {/* Modal Content: does NOT close modal on press */}
           {showModalContent && (
             <>
               <Animated.View style={animtedStyle}>
                 <Image
                   source={require('./cancel.png')}
-                  style={{ width: 30, height: 30,marginBottom:20 }}
+                  style={{ width: 30, height: 30, marginBottom: 20 }}
                 />
               </Animated.View>
               <Animated.View
@@ -90,30 +107,20 @@ const Sheet = () => {
                   {
                     height: 600,
                     width: '100%',
-                    backgroundColor: '#471396',
+                    backgroundColor: backgroundColor || '#471396',
                     borderTopRightRadius: 40,
                     borderTopLeftRadius: 40,
                   },
                   animtedStyle,
                 ]}
-              > 
-                <Text>Hello</Text>
+              >
+                {children}
               </Animated.View>
             </>
           )}
-        </TouchableOpacity>
+        </View>
       </Modal>
-      <View
-        style={{
-          marginTop: StatusBar.currentHeight,
-          padding: 20,
-          flex: 1,
-          // backgroundColor: 'pink',
-          //   justifyContent: 'flex-end',
-        }}
-      >
-        <Button title="OPen modal" onPress={() => setModalShow(!modalShow)} />
-      </View>
+    
     </>
   );
 };
