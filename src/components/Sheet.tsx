@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Pressable,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Animated, {
@@ -18,7 +19,7 @@ import Animated, {
   withDelay,
   runOnJS,
 } from 'react-native-reanimated';
-
+import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 interface ModalProps {
   onClose?: () => void;
   backgroundColor?: string;
@@ -37,19 +38,7 @@ const Sheet: React.FC<ModalProps> = ({
 }) => {
   const sv = useSharedValue(1000);
   const opacityValue = useSharedValue(0);
-  const [modalShow, setModalShow] = useState(false);
   const [showModalContent, setShowModalContent] = useState(false);
-
-  const inValue = () => {
-    // console.log('hi');
-    sv.value = withDelay(
-      400,
-      withTiming(0, {
-        duration: 100,
-        easing: Easing.out(Easing.cubic),
-      }),
-    );
-  };
 
   const animtedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: sv.value }],
@@ -73,11 +62,7 @@ const Sheet: React.FC<ModalProps> = ({
     } else {
       opacityValue.value = 0;
       (sv.value = 1000), setShowModalContent(false);
-      // sv.value = withTiming(1000, { duration: 400 }, finished => {
-      //   if (finished) {
-      //     runOnJS(setShowModalContent)(false);
-      //   }
-      // });
+  
     }
   }, [visible]);
   return (
@@ -89,72 +74,75 @@ const Sheet: React.FC<ModalProps> = ({
         statusBarTranslucent
         onRequestClose={onClose}
       >
-        <View
-          style={[
-            StyleSheet.absoluteFillObject,
-            { justifyContent: 'flex-end', alignItems: 'center' },
-          ]}
-        >
-          {/* Overlay: closes modal on press */}
-          <TouchableOpacity
-            activeOpacity={1}
-            onPress={onClose}
-            style={{
-              ...StyleSheet.absoluteFillObject,
-              backgroundColor: 'rgba(0,0,0,0.6)',
-              zIndex:999,
-            }}
-          />
-          {/* Modal Content: does NOT close modal on press */}
-          {showModalContent && (
-            <>
-              {/* <Animated.View
-                style={[animtedStyle, opacityStyle]}
-              ></Animated.View> */}
-              <Animated.View
-                style={[
-                  {
-                    width: '100%',
-                    alignItems: 'center',
-                    zIndex:1000,
-                  },
-                  animtedStyle,
-                  opacityStyle,
-                ]}
-              >
-                <TouchableOpacity activeOpacity={1} onPress={onClose} style={styles.closeButton}>
-                  <Image
-                    source={require('./close.png')}
-                    style={{ width: 30, height: 30, marginBottom: 20 }}
-                  />
-                </TouchableOpacity>
-                <View
+        
+          <View
+            style={[
+              StyleSheet.absoluteFillObject,
+              { justifyContent: 'flex-end', alignItems: 'center' },
+            ]}
+          >
+            {/* Overlay: closes modal on press */}
+            <Pressable
+              onPress={onClose}
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                // backgroundColor: 'red',
+                backgroundColor: 'rgba(0,0,0,0.6)',
+                zIndex: 999,
+              }}
+            />
+            {/* Modal Content: does NOT close modal on press */}
+            {showModalContent && (
+              <>
+                <Animated.View
                   style={[
                     {
-                      height: height || 600,
                       width: '100%',
-                      backgroundColor: backgroundColor || '#471396',
-                      borderTopRightRadius: 40,
-                      borderTopLeftRadius: 40,
+                      alignItems: 'center',
+                      zIndex: 1000,
                     },
                     animtedStyle,
+                    opacityStyle,
                   ]}
                 >
-                  {children}
-                </View>
-              </Animated.View>
-            </>
-          )}
-        </View>
+                  <Pressable
+                    // activeOpacity={1}
+                    onPress={onClose}
+                    style={styles.closeButton}
+                  >
+                    <Image
+                      source={require('./close.png')}
+                      style={{ width: 30, height: 30, marginBottom: 20 }}
+                    />
+                  </Pressable>
+
+                  <View
+                    style={[
+                      {
+                        height: height || 600,
+                        width: '100%',
+                        backgroundColor: backgroundColor || '#471396',
+                        borderTopRightRadius: 40,
+                        borderTopLeftRadius: 40,
+                      },
+                    ]}
+                  >
+                    {children}
+                  </View>
+                </Animated.View>
+              </>
+            )}
+          </View>
+       
       </Modal>
     </>
   );
 };
 const styles = StyleSheet.create({
-  closeButton:{
-    width:"100%",
-    justifyContent:"center",
-    alignItems:"center"
-  }
-})
+  closeButton: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 export default Sheet;
