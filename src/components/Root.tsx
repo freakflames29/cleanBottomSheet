@@ -15,6 +15,8 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+// import BottomModalSheet from 'react-native-animated-bottom-modal'
+import {BottomModalSheet} from 'animated-bottom-modal-reactnative'
 const Root = () => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const poistion = useSharedValue(0);
@@ -29,11 +31,9 @@ const Root = () => {
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
     
       <Button title="Show modal" onPress={() => setModalVisible(true)} />
-      <Sheet visible={modalVisible} onClose={() => setModalVisible(false)} backgroundColor='white'>
-        <View style={{width:"100%",padding:20}}>
+      <BottomModalSheet visible={modalVisible} onClose={()=>setModalVisible(false)} height={500}>
           <Text>Hello</Text>
-        </View>
-      </Sheet>
+      </BottomModalSheet>
     </View>
   );
 };
