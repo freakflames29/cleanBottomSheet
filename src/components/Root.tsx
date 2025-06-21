@@ -1,4 +1,4 @@
-import { View, Text,Button } from 'react-native'
+import { View, Text,Button, ScrollView } from 'react-native'
 import React from 'react'
 import Sheet from './Sheet';
 
@@ -9,8 +9,8 @@ const Root = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Root</Text>
-      <Sheet onClose={() => setModalVisible(false)} visible={modalVisible} backgroundColor='white'>
-        <Text>Modal Content</Text>
+      <Sheet onClose={() => setModalVisible(false)} visible={modalVisible} backgroundColor='white' height={800}>
+        <Text>Hello</Text>
       </Sheet>
       <Button title='Open modal' onPress={()=>setModalVisible(true)}/>
     </View>

@@ -25,6 +25,7 @@ interface ModalProps {
   visible?: boolean;
   children?: React.ReactNode;
   style?: object;
+  height?: number;
 }
 
 const Sheet: React.FC<ModalProps> = ({
@@ -32,10 +33,13 @@ const Sheet: React.FC<ModalProps> = ({
   backgroundColor,
   visible,
   children,
+  height,
 }) => {
   const sv = useSharedValue(1000);
+  const opacityValue = useSharedValue(0);
   const [modalShow, setModalShow] = useState(false);
   const [showModalContent, setShowModalContent] = useState(false);
+
   const inValue = () => {
     // console.log('hi');
     sv.value = withDelay(
@@ -46,13 +50,19 @@ const Sheet: React.FC<ModalProps> = ({
       }),
     );
   };
+
   const animtedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: sv.value }],
+  }));
+
+  const opacityStyle = useAnimatedStyle(() => ({
+    opacity: opacityValue.value,
   }));
 
   useEffect(() => {
     if (visible) {
       setShowModalContent(true);
+      opacityValue.value = 1;
       sv.value = withDelay(
         300,
         withTiming(0, {
@@ -61,6 +71,7 @@ const Sheet: React.FC<ModalProps> = ({
         }),
       );
     } else {
+      opacityValue.value = 0;
       (sv.value = 1000), setShowModalContent(false);
       // sv.value = withTiming(1000, { duration: 400 }, finished => {
       //   if (finished) {
@@ -91,38 +102,59 @@ const Sheet: React.FC<ModalProps> = ({
             style={{
               ...StyleSheet.absoluteFillObject,
               backgroundColor: 'rgba(0,0,0,0.6)',
+              zIndex:999,
             }}
           />
           {/* Modal Content: does NOT close modal on press */}
           {showModalContent && (
             <>
-              <Animated.View style={animtedStyle}>
-                <Image
-                  source={require('./cancel.png')}
-                  style={{ width: 30, height: 30, marginBottom: 20 }}
-                />
-              </Animated.View>
+              {/* <Animated.View
+                style={[animtedStyle, opacityStyle]}
+              ></Animated.View> */}
               <Animated.View
                 style={[
                   {
-                    height: 600,
                     width: '100%',
-                    backgroundColor: backgroundColor || '#471396',
-                    borderTopRightRadius: 40,
-                    borderTopLeftRadius: 40,
+                    alignItems: 'center',
+                    zIndex:1000,
                   },
                   animtedStyle,
+                  opacityStyle,
                 ]}
               >
-                {children}
+                <TouchableOpacity activeOpacity={1} onPress={onClose} style={styles.closeButton}>
+                  <Image
+                    source={require('./close.png')}
+                    style={{ width: 30, height: 30, marginBottom: 20 }}
+                  />
+                </TouchableOpacity>
+                <View
+                  style={[
+                    {
+                      height: height || 600,
+                      width: '100%',
+                      backgroundColor: backgroundColor || '#471396',
+                      borderTopRightRadius: 40,
+                      borderTopLeftRadius: 40,
+                    },
+                    animtedStyle,
+                  ]}
+                >
+                  {children}
+                </View>
               </Animated.View>
             </>
           )}
         </View>
       </Modal>
-    
     </>
   );
 };
-
+const styles = StyleSheet.create({
+  closeButton:{
+    width:"100%",
+    justifyContent:"center",
+    alignItems:"center"
+  }
+})
 export default Sheet;
