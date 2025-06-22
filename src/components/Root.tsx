@@ -31,8 +31,10 @@ const Root = () => {
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
     
       <Button title="Show modal" onPress={() => setModalVisible(true)} />
-      <BottomModalSheet visible={modalVisible} onClose={()=>setModalVisible(false)} height={500}>
-          <Text>Hello</Text>
+      <BottomModalSheet visible={modalVisible} onClose={()=>setModalVisible(false)} height={500} >
+        <View style={{flex:1,width:"100%",padding:29,justifyContent:"center",alignItems:"center"}}>
+          <Text style={{fontSize:25}}>The awesome content</Text>
+        </View>
       </BottomModalSheet>
     </View>
   );

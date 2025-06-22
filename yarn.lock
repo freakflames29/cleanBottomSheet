@@ -2066,10 +2066,10 @@ ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-animated-bottom-modal-reactnative@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/animated-bottom-modal-reactnative/-/animated-bottom-modal-reactnative-1.0.1.tgz#c37e98fc1a8c6709a89fc3046251928a82dc7c9f"
-  integrity sha512-AXQVkAgVn85BoMoVy8lKlNdIwDI0hE3TObeFtCSQoaaIx+u6RlHg2bLxfxyhr8lTiNWXZ8pF2/CxoAYYgs4ZAA==
+animated-bottom-modal-reactnative@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/animated-bottom-modal-reactnative/-/animated-bottom-modal-reactnative-1.0.2.tgz#85a1f13d36e06c74cd79d29841e7a56e13fcb80d"
+  integrity sha512-EbxAQB/b5yzFY8/2LggkzOepoiej2nDrFB45Pc1vhpjgpkWjDKsI7tjUCs1BXFsO05Wi2JZpkuT/YsFP6apVTA==
   dependencies:
     react-native "^0.80.0"
     react-native-gesture-handler "^2.26.0"
