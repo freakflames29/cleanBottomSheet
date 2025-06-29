@@ -7,18 +7,9 @@ const NewTest = () => {
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <View style={{ flex: 1, marginTop:200,justifyContent: 'center', alignItems: 'center' }}>
-      <Button onPress={() => setShowModal(true)}>Open Modal</Button>
-
-      <CleanBottomSheet
-        visible={showModal}
-        onClose={() => setShowModal(false)}
-        height={600}
-        backgroundColor='red'
-        borderRadius={30}
-      >
-        <Text>This is. atext</Text>
-      </CleanBottomSheet>
+    <View style={{ flex: 1}}>
+      {/* <Button onPress={() => setShowModal(true)}>Open Modal</Button> */}
+      <CleanBottomSheet/>
     </View>
   );
 };

@@ -21,24 +21,7 @@ import Animated, {
 import { Button } from 'react-native-paper';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
-
-interface ModalProps {  
-  onClose?: () => void;
-  backgroundColor?: string;
-  height?: number;
-  visible?: boolean;
-  borderRadius?: number;
-
-}
-
-const CleanBottomSheet:React.FC<ModalProps> = ({
-  onClose,
-  backgroundColor = '#fff',
-  height = 600,
-  visible = false,
-  borderRadius = 30,
-  children
-}) => {
+const CleanBottomSheet = () => {
   const sv = useSharedValue(600);
   const [modalShow, setModalShow] = React.useState(false);
   const change = () => {
@@ -64,11 +47,7 @@ const CleanBottomSheet:React.FC<ModalProps> = ({
       console.log('Gesture ended');
       if (e.translationY > 200) {
         // Animate out, then hide modal
-        sv.value = withTiming(600, {}, () => {
-          if (onClose) {
-            runOnJS(onClose)();
-          }
-        });
+        sv.value = withTiming(600, {}, () => runOnJS(setModalShow)(false));
       } else {
         // Snap back up
         sv.value = withTiming(0);
@@ -76,18 +55,17 @@ const CleanBottomSheet:React.FC<ModalProps> = ({
     });
 
   React.useEffect(() => {
-    if (visible) {
+    if (modalShow) {
       sv.value = withDelay(100, withSpring(0, { damping: 20, stiffness: 100 }));
     } else {
       sv.value = 600;
     }
-  }, [visible]);
+  }, [modalShow]);
   React.useEffect(() => {
-    if (!visible) return;
+    if (!modalShow) return;
 
     const onBackPress = () => {
-      // setModalShow(false);
-      onClose?.();
+      setModalShow(false);
       return true; // Prevent default back action
     };
 
@@ -96,10 +74,10 @@ const CleanBottomSheet:React.FC<ModalProps> = ({
     return () => {
       subs.remove();
     };
-  }, [visible]);
+  }, [modalShow]);
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      {visible && (
+      {modalShow && (
         <View
           style={{
             position: 'absolute',
@@ -116,22 +94,23 @@ const CleanBottomSheet:React.FC<ModalProps> = ({
           <Pressable
             style={{
               ...StyleSheet.absoluteFillObject,
+              // backgroundColor:"blue"
               backgroundColor: 'rgba(0,0,0,0.5)',
             }}
-            onPress={onClose}
+            onPress={() => setModalShow(false)}
           />
 
-          {/* Bottom Sheet */}
+          {/* Bottom Sheet: does NOT close modal on press */}
           <GestureDetector gesture={gesture}>
             <Animated.View
               style={[
                 {
                   position: 'relative',
-                  height: height,
+                  height: 600,
                   width: '100%',
-                  backgroundColor: backgroundColor || 'tomato', // <-- SHEET background
-                  borderTopRightRadius: borderRadius,
-                  borderTopLeftRadius: borderRadius,
+                  backgroundColor: 'tomato',
+                  borderTopRightRadius: 30,
+                  borderTopLeftRadius: 30,
                 },
                 animatedStyle,
               ]}
@@ -141,10 +120,10 @@ const CleanBottomSheet:React.FC<ModalProps> = ({
                   position: 'absolute',
                   top: -50,
                   left: '50%',
-                  transform: [{ translateX: -15 }],
+                  transform: [{ translateX: -15 }], // half of image width (30/2)
                   zIndex: 10,
                 }}
-                onPress={onClose}
+                onPress={() => setModalShow(false)}
               >
                 <Image
                   source={require('./close.png')}
@@ -156,12 +135,29 @@ const CleanBottomSheet:React.FC<ModalProps> = ({
                   }}
                 />
               </Pressable>
-              {children}
+              <Button
+                mode="contained"
+                onPress={() => setModalShow(false)}
+                style={{ margin: 10 }}
+              >
+                close
+              </Button>
+              <Text>Gest</Text>
             </Animated.View>
           </GestureDetector>
         </View>
       )}
-     
+
+      <Button
+        mode="contained"
+        onPress={() => {
+          setModalShow(true);
+          change();
+        }}
+        style={{ margin: 10 }}
+      >
+        Open Bottom Sheet
+      </Button>
     </View>
   );
 };
