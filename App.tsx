@@ -6,7 +6,13 @@
  */
 
 import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import {
+  StatusBar,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+} from 'react-native';
 import Sheet from './src/components/Sheet';
 import AnoSheet from './src/components/AnoSheet';
 import Root from './src/components/Root';
@@ -16,9 +22,12 @@ import {
   MD3DarkTheme,
   MD3Theme,
   MD3LightTheme,
+  Button,
 } from 'react-native-paper';
 import PaperTest from './src/components/PaperTest';
-import Gest from './src/components/Gest';
+import CleanBottomSheet from './src/components/CleanBotomSheet';
+import { useState } from 'react';
+import NewTest from './src/components/NewTest';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -40,7 +49,6 @@ function App() {
 
       surface: 'tomato',
       onSurface: '#fff',
-      
     },
   };
 
@@ -49,7 +57,7 @@ function App() {
       <PaperProvider theme={myTheme}>
         <View style={styles.container}>
           <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-          <Gest />
+          <NewTest />
         </View>
       </PaperProvider>
     </GestureHandlerRootView>
