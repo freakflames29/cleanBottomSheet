@@ -28,6 +28,7 @@ import PaperTest from './src/components/PaperTest';
 import CleanBottomSheet from './src/components/CleanBotomSheet';
 import { useState } from 'react';
 import NewTest from './src/components/NewTest';
+import Latest from './src/components/Latest';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -57,7 +58,7 @@ function App() {
       <PaperProvider theme={myTheme}>
         <View style={styles.container}>
           <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-          <NewTest />
+          <Latest />
         </View>
       </PaperProvider>
     </GestureHandlerRootView>
